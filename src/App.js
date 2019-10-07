@@ -12,18 +12,23 @@ import ProductContext from "./contexts/ProductContext";
 import CartContext from "./contexts/CartContext";
 
 function App() {
+	const startingCartData = JSON.parse(localStorage.getItem("cart"));
+
 	const [products] = useState(data);
-	const [cart, setCart] = useState([]);
+	const [cart, setCart] = useState(startingCartData);
 
 	const addItem = item => {
 		const idsInCart = cart.map(item => item.id);
 		if (!idsInCart.includes(item.id)) {
 			setCart([...cart, item]);
+			localStorage.setItem("cart", JSON.stringify([...cart, item]));
 		}
 	};
 
 	const removeItem = item => {
-		setCart([...cart].filter(cartItem => cartItem.id !== item.id));
+		const filteredCart = cart.filter(cartItem => cartItem.id !== item.id);
+		setCart(filteredCart);
+		localStorage.setItem("cart", JSON.stringify(filteredCart));
 	}
 
 	return (
